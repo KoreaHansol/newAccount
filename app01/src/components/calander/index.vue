@@ -8,7 +8,9 @@
 
     <!-- 요일 -->
     <div class="day-of-week">
-      <div class="item" v-for="day in dayOfWeek" :key="day">{{ day }}</div>
+      <div class="day-area" v-for="day in dayOfWeek" :key="day">
+        <div class="day-font">{{ day }}</div>
+      </div>
     </div>
     
     <div class="">
@@ -54,6 +56,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
+// 루트
   .container {
     display: flex;
     flex-direction: column;
@@ -61,18 +64,27 @@ export default {
     height: 100%;
     background: red;
   }
+
+  // 상단 - 요일
   .day-of-week {
     display: flex;
     flex-direction: row;
     background: yellow;
-    height: 14%
+    height: 14%;
   }
-  .day-of-week .item {
+  .day-of-week .day-area {
+    display: flex;
     flex: 1 auto;
     width: 14%;
-    align-self: center;
-    text-align: center;
+    height: 100%;
+    border: solid 1px;
+    justify-content: center;
   }
+  .day-of-week .day-area .day-font {
+    align-self: center;
+  }
+
+  // 상단 - 화살표쪽
   .display-month {
     display: flex;
     justify-content: space-between
