@@ -1,5 +1,10 @@
 <template>
   <div class="container">
+    <div class="display-month">
+      <div class="move-month-button" @click="moveMonthClickEvent('decrease')">&lt;</div>
+      <div>{{ selectYear }}년 {{ selectMonth }}월</div>
+      <div class="move-month-button" @click="moveMonthClickEvent('increase')">&gt;</div>
+    </div>
     <div class="acclist-title-row">
       <div class="acclist-title-col"><div class="font">날짜</div></div>
       <div class="acclist-title-col"><div class="font">수입</div></div>
@@ -9,12 +14,16 @@
     </div>
     
     <div class="list-container">
-      <div class="acclist-row" v-for="acc, idx in dummy" :key="idx">
+      <div class="acclist-row" v-for="acc, idx in filterBySelectDay" :key="idx">
         <div class="acclist-col"><div class="font">{{ acc.date }}</div></div>
         <div class="acclist-col"><div class="font">{{ acc.income }}</div></div>
         <div class="acclist-col"><div class="font">{{ acc.outcome }}</div></div>
         <div class="acclist-col hover"><div class="font">수정</div></div>
         <div class="acclist-col hover"><div class="font">삭제</div></div>
+      </div>
+
+      <div class="no-data" v-show="!filterBySelectDay.length"> 
+        데이터가 없습니다
       </div>
     </div>
   </div>
@@ -23,6 +32,8 @@
 
 <script>
 import Calender from '@/components/calander'
+import moment from 'moment'
+import _ from 'lodash'
 export default {
   name: 'accoutlist',
   components: {
@@ -30,27 +41,43 @@ export default {
   },
   data() {
     return {
-      dummy: [
-        { date: '2020-10-15', income: 50000, outcome: 40000 },
-        { date: '2020-11-15', income: 50000, outcome: 40000 },
-        { date: '2020-12-15', income: 50000, outcome: 40000 },
-        { date: '2020-1-15', income: 50000, outcome: 40000 },
-        { date: '2020-2-15', income: 50000, outcome: 40000 },
-        { date: '2020-3-15', income: 50000, outcome: 40000 },
-        { date: '2020-10-15', income: 50000, outcome: 40000 },
-        { date: '2020-11-15', income: 50000, outcome: 40000 },
-        { date: '2020-12-15', income: 50000, outcome: 40000 },
-        { date: '2020-1-15', income: 50000, outcome: 40000 },
-        { date: '2020-2-15', income: 50000, outcome: 40000 },
-        { date: '2020-3-15', income: 50000, outcome: 40000 },
-        { date: '2020-10-15', income: 50000, outcome: 40000 },
-        { date: '2020-11-15', income: 50000, outcome: 40000 },
-        { date: '2020-12-15', income: 50000, outcome: 40000 },
-        { date: '2020-1-15', income: 50000, outcome: 40000 },
-        { date: '2020-2-15', income: 50000, outcome: 40000 },
-        { date: '2020-3-15', income: 50000, outcome: 40000 }
-      ]
+      selectYear: 2021, //현재 년도 - moment로 바꾸기
+      selectMonth: 3, //현재 달
     }
+  },
+  computed: {
+    getaccList() {
+      return this.$store.getters.getaccList
+    },
+    filterBySelectDay() { //select된 달만 리스트 필터링 하기위한 메소드
+      const filterBySelectDay = _.filter(this.getaccList, acc => {
+        return moment(acc.date).format('YYYY-M') === (this.selectYear + '-' + this.selectMonth).toString()
+      })
+      
+      return filterBySelectDay
+    }
+  },
+  methods: {
+    moveMonthClickEvent(mode) { //현재 select 된 년도와 달을 조정하기 위한 메소드
+      switch(mode) {
+        case 'increase':
+          if(this.selectMonth >= 12) {
+            this.selectMonth = 1
+            this.selectYear++
+          } else {
+            this.selectMonth++
+          }
+          break
+        case 'decrease':
+           if(this.selectMonth <= 1) {
+            this.selectMonth = 12
+            this.selectYear--
+          } else {
+            this.selectMonth--
+          }
+          break
+      }
+    },
   }
 }
 </script>
@@ -75,7 +102,7 @@ export default {
  .acclist-row {
    display: flex;
    height: 10%;
-   flex: 1 0 auto;
+   flex: 0 0 auto;
    background: darkgrey;
    text-align: center;
  }
@@ -97,4 +124,15 @@ export default {
    flex-direction: column;
    height: 100%;
  }
+
+ .display-month {
+    display: flex;
+    justify-content: space-between
+  }
+  .display-month .move-month-button:hover {
+    cursor: pointer;
+  }
+  .no-data {
+    text-align: center;
+  }
 </style>
