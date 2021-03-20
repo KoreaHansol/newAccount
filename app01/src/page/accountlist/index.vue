@@ -158,6 +158,9 @@ export default {
     display: flex;
     justify-content: space-between
   }
+  .display-month .move-month-button {
+    background: blanchedalmond;
+  }
   .display-month .move-month-button:hover {
     cursor: pointer;
   }
