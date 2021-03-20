@@ -19,7 +19,10 @@ const store = new Vuex.Store({
     },
     mutations: {
         insertIntoAccList(state, data) {
-            return state.accList = _.concat(state.accList, _.merge(data, {seq: ++state.seq}))
+            state.accList = _.concat(state.accList, _.merge(data, {seq: ++state.seq}))
+        },
+        deleteAccByAccList(state, seq) {
+            state.accList.splice(_.findIndex(state.accList, function(acc) { return acc.seq === seq; }), 1);
         }
     }
 })

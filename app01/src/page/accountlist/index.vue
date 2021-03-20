@@ -9,6 +9,7 @@
       <div class="acclist-title-col"><div class="font">날짜</div></div>
       <div class="acclist-title-col"><div class="font">수입</div></div>
       <div class="acclist-title-col"><div class="font">지출</div></div>
+      <div class="acclist-title-col"><div class="font">내용</div></div>
       <div class="acclist-title-col"><div class="font">수정</div></div>
       <div class="acclist-title-col"><div class="font">삭제</div></div>
     </div>
@@ -18,13 +19,17 @@
         <div class="acclist-col"><div class="font">{{ acc.date }}</div></div>
         <div class="acclist-col"><div class="font">{{ acc.income }}</div></div>
         <div class="acclist-col"><div class="font">{{ acc.outcome }}</div></div>
-        <div class="acclist-col hover"><div class="font">수정</div></div>
-        <div class="acclist-col hover"><div class="font">삭제</div></div>
+         <div class="acclist-col"><div class="font">{{ acc.content }}</div></div>
+        <div class="acclist-col hover" @click="updateAccListToSeq(acc.seq)"><div class="font">수정</div></div>
+        <div class="acclist-col hover" @click="deleteAccListToSeq(acc.seq)"><div class="font">삭제</div></div>
       </div>
-
       <div class="no-data" v-show="!filterBySelectDay.length"> 
         데이터가 없습니다
       </div>
+    </div>
+    <div class="sumAccIncomeAndOutcom">
+      <div class=""><div class="font">: {{ getSumByFilterdMonth }}원</div></div>
+      <div class=""><div class="font">합계 </div></div>
     </div>
   </div>
   
@@ -55,6 +60,13 @@ export default {
       })
       
       return filterBySelectDay
+    },
+    getSumByFilterdMonth() {
+      const sumByFilterdMonth = _.sumBy(this.filterBySelectDay, acc => {
+        return acc.income - acc.outcome
+      })
+      
+      return sumByFilterdMonth
     }
   },
   created() {
@@ -84,6 +96,13 @@ export default {
           break
       }
     },
+    updateAccListToSeq(seq) {
+      console.log('update seq',seq)
+    },
+    deleteAccListToSeq(seq) {
+      this.$store.commit('deleteAccByAccList', seq)
+      console.log('delete seq',seq)
+    }
   }
 }
 </script>
@@ -112,10 +131,15 @@ export default {
    background: darkgrey;
    text-align: center;
  }
+  .acclist-row:hover {
+   background: blanchedalmond;
+   cursor: pointer;
+ }
  .acclist-row .acclist-col {
    display: flex;
    height: 100%;
-   width: 20%;
+   width: 16.6666%;
+   overflow: auto;
    align-items: center;
    justify-content: center;
    border: 1px solid;
@@ -128,7 +152,7 @@ export default {
    display: flex;
    overflow: auto;
    flex-direction: column;
-   height: 100%;
+   height: 75%;
  }
 
  .display-month {
@@ -140,5 +164,10 @@ export default {
   }
   .no-data {
     text-align: center;
+  }
+  .sumAccIncomeAndOutcom {
+    display: flex;
+    flex-direction: row-reverse;
+    height: 15%;
   }
 </style>

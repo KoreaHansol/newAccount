@@ -7,6 +7,10 @@
         <div class="input-area"><input class="inputbox" :class="{ error: errorValidDate && !insertDate }" placeholder="날짜를 선택하세요" v-model="insertDate" readonly/></div>
     </div>
     <div class="area">
+        <div class="font">내용</div>
+        <div class="input-area"><input class="inputbox" :class="{ error: errorValidContent && !content }" placeholder="내용을 입력하세요" v-model="content"/></div>
+    </div>
+    <div class="area">
         <div class="font">수입</div>
         <div class="input-area"><input class="inputbox" :class="{ error: errorIncome && !insertIncome }" type="number" placeholder="숫자를 입력하세요" v-model="insertIncome"/></div>
     </div>
@@ -41,11 +45,13 @@ export default {
       insertDate: '',
       insertIncome: null,
       insertOutcome: null,
+      content: '',
 
       errorValidDate: false,
       errorIncome: false,
       errorValidOutcome: false,
-      
+      errorValidContent: false,
+
     }
   },
   methods: {
@@ -67,6 +73,10 @@ export default {
             this.errorValidOutcome = true;
             validationError.push('지출을 입력하세요')
         }
+        if(!this.content) {
+            this.errorValidContent = true;
+            validationError.push('내용을 입력하세요')
+        }
 
         if(validationError.length){
             alert('필수 데이터를 입력하세요')
@@ -81,7 +91,8 @@ export default {
         const insertOjb = {
             date: this.insertDate,
             income: this.insertIncome,
-            outcome: this.insertOutcome
+            outcome: this.insertOutcome,
+            content: this.content
         }
         this.$store.commit('insertIntoAccList', insertOjb)
         this.$router.push({ name: 'accountlist', params: {date: this.insertDate}})

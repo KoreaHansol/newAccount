@@ -26,14 +26,10 @@ export default {
   name: 'calander',
   data() {
     return {
-      selectYear: 2021, //현재 년도 - moment로 바꾸기
-      selectMonth: 3, //현재 달
+      selectYear: moment().year(), //현재 년도
+      selectMonth: moment().month() + 1, //현재 달
       pickDay: '', //마우스로 픽업한 날짜
       dayOfWeek: ['월', '화', '수', '목', '금', '토', '일'], // 요일은 고정
-
-      today: moment(),
-      startWeek: moment().clone().startOf('month').week(),
-      endWeek: moment().clone().endOf('month').week() === 1 ? 53 : moment().clone().endOf('month').week(),
 
       displayMonthOfDay: [],
     }
