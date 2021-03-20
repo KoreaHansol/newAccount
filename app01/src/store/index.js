@@ -23,7 +23,10 @@ const store = new Vuex.Store({
         },
         deleteAccByAccList(state, seq) {
             state.accList.splice(_.findIndex(state.accList, function(acc) { return acc.seq === seq; }), 1);
-        }
+        },
+        updateIntoAccList(state, data) {
+            state.accList.splice(_.findIndex(state.accList, function(acc) { return acc.seq === data.seq; }), 1, data);
+        },
     }
 })
 export default store

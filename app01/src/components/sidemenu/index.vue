@@ -6,6 +6,7 @@
 
 <script>
 import router from '@/router'
+import _ from 'lodash'
 export default {
     name: 'SideMenu',
     data() {
@@ -14,7 +15,11 @@ export default {
         }
     },
     created() {
-        this.routes = router.options.routes
+        _.forEach(router.options.routes, route => {
+            if(route.isAdd && route.isAdd) {
+                this.routes.push(route)
+            }
+        })
     }
 }
 </script>

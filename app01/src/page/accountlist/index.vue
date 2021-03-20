@@ -28,8 +28,8 @@
       </div>
     </div>
     <div class="sumAccIncomeAndOutcom">
-      <div class=""><div class="font">: {{ getSumByFilterdMonth }}원</div></div>
-      <div class=""><div class="font">합계 </div></div>
+      <div class=""><div class="font-sum">: {{ getSumByFilterdMonth }}원</div></div>
+      <div class=""><div class="font-sum">합계 </div></div>
     </div>
   </div>
   
@@ -97,11 +97,10 @@ export default {
       }
     },
     updateAccListToSeq(seq) {
-      console.log('update seq',seq)
+      this.$router.push({ name: 'accountupdate', params: {seq: seq}})
     },
     deleteAccListToSeq(seq) {
       this.$store.commit('deleteAccByAccList', seq)
-      console.log('delete seq',seq)
     }
   }
 }
@@ -169,5 +168,8 @@ export default {
     display: flex;
     flex-direction: row-reverse;
     height: 15%;
+  }
+  .font-sum {
+    font-size: 120%;
   }
 </style>
