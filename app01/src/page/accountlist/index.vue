@@ -1,13 +1,13 @@
 <template>
   <div>
-    <Calender />
+    accoutlist
   </div>
 </template>
 
 <script>
 import Calender from '@/components/calander'
 export default {
-  name: 'home',
+  name: 'accoutlist',
   components: {
     Calender
   }

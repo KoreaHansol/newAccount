@@ -5,30 +5,42 @@
       <div>{{ selectYear }}년 {{ selectMonth }}월</div>
       <div class="move-month-button" @click="moveMonthClickEvent('increase')">&gt;</div>
     </div>
-
-    <!-- 요일 -->
+      <!-- 요일(고정된) -->
     <div class="day-of-week">
       <div class="day-area" v-for="day in dayOfWeek" :key="day">
         <div class="day-font">{{ day }}</div>
       </div>
     </div>
-    
-    <div class="">
-
+    <!-- 날자들 -->
+    <div class="day-of-row">
+      <div class="day-font" v-for="day in displayMonthOfDay" :key="day" @click="selectDay(day)">{{ day }}</div>
     </div>
   </div>
 </template>
 
 <script>
+import moment from 'moment'
 
 export default {
   name: 'calander',
   data() {
     return {
-      selectYear: 2021, //현재 년도
+      selectYear: 2021, //현재 년도 - moment로 바꾸기
       selectMonth: 3, //현재 달
+      pickDay: '', //마우스로 픽업한 날짜
       dayOfWeek: ['월', '화', '수', '목', '금', '토', '일'], // 요일은 고정
+
+      today: moment(),
+      startWeek: moment().clone().startOf('month').week(),
+      endWeek: moment().clone().endOf('month').week() === 1 ? 53 : moment().clone().endOf('month').week(),
+
+      displayMonthOfDay: [],
     }
+  },
+  created() {
+    this.pushToCalenderLogicInDisplayArray()
+  },
+  updated() {
   },
   methods: {
     moveMonthClickEvent(mode) { //현재 select 된 년도와 달을 조정하기 위한 메소드
@@ -50,6 +62,29 @@ export default {
           }
           break
       }
+      this.pushToCalenderLogicInDisplayArray() //갱신을 위한 호출
+    },
+    pushToCalenderLogicInDisplayArray() { //보여줄 날짜들을 요일에 맞게 잡아준후 넣어주는 메소드
+      this.displayMonthOfDay = []
+      const parseCurrentYearAndMonth = this.selectYear + '-' + this.selectMonth //포맷팅
+      const startOfMonth = moment(parseCurrentYearAndMonth).startOf('month').day() //3월에선 월욜으로 시작하고 (1)
+      const endDayOfMonth = moment(parseCurrentYearAndMonth).endOf("month").format('DD') //달에서 끝날 (끝날은 곧 총 날자의 수를 의미)
+      let surPlusOfMonth = 0; //''를 push하면 현재 달의 날짜수와 틀어짐으로 계산해줄 변수가 필요
+      for(let i = 1; i < endDayOfMonth + startOfMonth; i++) {
+        if(i < startOfMonth) {
+          this.displayMonthOfDay.push('')
+          surPlusOfMonth++;
+        } else {
+          this.displayMonthOfDay.push(i - surPlusOfMonth)
+        }
+
+        if(i - surPlusOfMonth >= endDayOfMonth)
+          break;
+      }
+    },
+    selectDay(day) {
+      this.pickDay = this.selectYear + '-' + this.selectMonth + '-' + day
+      console.log("pickDay", this.pickDay)
     }
   }
 }
@@ -62,20 +97,20 @@ export default {
     flex-direction: column;
     width: 100%;
     height: 100%;
-    background: red;
+    background: white;
   }
 
   // 상단 - 요일
   .day-of-week {
     display: flex;
     flex-direction: row;
-    background: yellow;
+    background: antiquewhite;
     height: 14%;
   }
   .day-of-week .day-area {
     display: flex;
-    flex: 1 auto;
-    width: 14%;
+    width: 14.285714%;
+    flex: 0 auto;
     height: 100%;
     border: solid 1px;
     justify-content: center;
@@ -91,5 +126,26 @@ export default {
   }
   .display-month .move-month-button:hover {
     cursor: pointer;
+  }
+
+  // 요일들
+  .day-of-row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    height: 14%;
+  }
+  .day-of-row .day-font {
+    display: flex;
+    width: 14.285714%;
+    flex: 0 auto;
+    height: 100%;
+    z-index: 9999;
+    background: beige;
+    border: solid 1px;
+    justify-content: center;
+  }
+  .day-of-row .day-font:hover {
+    background: white;
   }
 </style>
