@@ -1,6 +1,6 @@
 <template>
     <div class="side-menu">
-        <router-link :to="route.path" class="side-menu home" v-for="route in routes" :key="route"><div class="font">{{ route.title }}</div></router-link>
+        <router-link :to="route.path" class="side-menu home" v-for="route, idx in routes" :key="idx"><div class="font">{{ route.title }}</div></router-link>
     </div>
 </template>
 
@@ -10,7 +10,7 @@ export default {
     name: 'SideMenu',
     data() {
         return {
-            routes: [], //route.index 에서 모든 라우팅을 가져올 변수
+            routes: [], //route.index 에서 모든 라우팅을 가져올 변수 (route/index에서 손대면 자동으로 생성되게 하기위함)
         }
     },
     created() {

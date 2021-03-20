@@ -7,13 +7,13 @@
     </div>
       <!-- 요일(고정된) -->
     <div class="day-of-week">
-      <div class="day-area" v-for="day in dayOfWeek" :key="day">
+      <div class="day-area" v-for="(day, idx) in dayOfWeek" :key="idx">
         <div class="day-font">{{ day }}</div>
       </div>
     </div>
     <!-- 날자들 -->
     <div class="day-of-row">
-      <div class="day-font" v-for="day in displayMonthOfDay" :key="day" @click="selectDay(day)">{{ day }}</div>
+      <div class="day-font" v-for="(day, idx) in displayMonthOfDay" :key="idx" @click="selectDay(day)">{{ day }}</div>
     </div>
   </div>
 </template>
@@ -66,7 +66,7 @@ export default {
     },
     pushToCalenderLogicInDisplayArray() { //보여줄 날짜들을 요일에 맞게 잡아준후 넣어주는 메소드
       this.displayMonthOfDay = []
-      const parseCurrentYearAndMonth = this.selectYear + '-' + this.selectMonth //포맷팅
+      const parseCurrentYearAndMonth = moment(this.selectYear + '-' + this.selectMonth, "YYYY-MM-DD"); //포맷팅
       const startOfMonth = moment(parseCurrentYearAndMonth).startOf('month').day() //3월에선 월욜으로 시작하고 (1)
       const endDayOfMonth = moment(parseCurrentYearAndMonth).endOf("month").format('DD') //달에서 끝날 (끝날은 곧 총 날자의 수를 의미)
       let surPlusOfMonth = 0; //''를 push하면 현재 달의 날짜수와 틀어짐으로 계산해줄 변수가 필요
