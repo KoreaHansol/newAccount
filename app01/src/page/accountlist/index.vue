@@ -41,8 +41,8 @@ export default {
   },
   data() {
     return {
-      selectYear: 2021, //현재 년도 - moment로 바꾸기
-      selectMonth: 3, //현재 달
+      selectYear: moment().year(), //현재 년도 - moment로 바꾸기
+      selectMonth: moment().month() + 1, //현재 달
     }
   },
   computed: {
@@ -55,6 +55,12 @@ export default {
       })
       
       return filterBySelectDay
+    }
+  },
+  created() {
+    if(this.$route.params.date) {
+      this.selectYear = moment(this.$route.params.date).year()
+      this.selectMonth = moment(this.$route.params.date).month() + 1
     }
   },
   methods: {

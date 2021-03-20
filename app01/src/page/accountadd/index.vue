@@ -4,22 +4,22 @@
 
     <div class="area">
         <div class="font">날짜</div>
-        <div class="input-area"><input class="inputbox" placeholder="날짜를 선택하세요" v-model="insertDate" readonly/></div>
+        <div class="input-area"><input class="inputbox" :class="{ error: errorValidDate && !insertDate }" placeholder="날짜를 선택하세요" v-model="insertDate" readonly/></div>
     </div>
     <div class="area">
         <div class="font">수입</div>
-        <div class="input-area"><input class="inputbox" type="number" placeholder="숫자를 입력하세요" v-model="insertIncome"/></div>
+        <div class="input-area"><input class="inputbox" :class="{ error: errorIncome && !insertIncome }" type="number" placeholder="숫자를 입력하세요" v-model="insertIncome"/></div>
     </div>
     <div class="area">
         <div class="font">지출</div>
-        <div class="input-area"><input class="inputbox" type="number" placeholder="숫자를 입력하세요" v-model="insertOutcome"/></div>
+        <div class="input-area"><input class="inputbox" :class="{ error: errorValidOutcome && !insertOutcome }" type="number" placeholder="숫자를 입력하세요" v-model="insertOutcome"/></div>
     </div>
     
     <div class="button-container">
-        <div class="button-area">
+        <div class="button-area" @click="addintoAccList">
             <div class="button-font">등록</div>
         </div>
-        <div class="button-area">
+        <div class="button-area" @click="pushCancleButton">
             <div class="button-font">취소</div>
         </div>
     </div>
@@ -41,11 +41,53 @@ export default {
       insertDate: '',
       insertIncome: null,
       insertOutcome: null,
+
+      errorValidDate: false,
+      errorIncome: false,
+      errorValidOutcome: false,
+      
     }
   },
   methods: {
     setDayFromChild(day) {
         this.insertDate = day
+    },
+    validationForm() {
+        let validationError = []
+
+        if(!this.insertDate) {
+            this.errorValidDate = true;
+            validationError.push('날짜를 선택하세요')
+        }
+        if(!this.insertIncome) {
+            this.errorIncome = true;
+            validationError.push('수입을 입력하세요')
+        }
+        if(!this.insertOutcome) {
+            this.errorValidOutcome = true;
+            validationError.push('지출을 입력하세요')
+        }
+
+        if(validationError.length){
+            alert('필수 데이터를 입력하세요')
+        }
+        return validationError
+    },
+    addintoAccList() {
+        if(this.validationForm().length) {
+            return
+        }
+            
+        const insertOjb = {
+            date: this.insertDate,
+            income: this.insertIncome,
+            outcome: this.insertOutcome
+        }
+        this.$store.commit('insertIntoAccList', insertOjb)
+        this.$router.push({ name: 'accountlist', params: {date: this.insertDate}})
+    },
+    pushCancleButton() {
+        this.$router.push({ name: 'accountlist' })
     }
   }
 }
@@ -108,5 +150,8 @@ export default {
     }
     .button-font {
         color: white;
+    }
+    .error {
+        border: 3px solid red;
     }
 </style>
