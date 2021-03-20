@@ -47,9 +47,9 @@ export default {
         background: rgb(74, 81, 140) !important;
     }
     a:link { 
-        color: red; text-decoration: none;
+        color: black ;text-decoration: none;
     }
-    a:visited { 
-        color: black; text-decoration: none;
+    a:visited {
+        color: black ;text-decoration: none;
     }
 </style>

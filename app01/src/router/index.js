@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import home from "@/page/home"
 import accountlist from '@/page/accountlist'
+import accountadd from '@/page/accountadd'
+
 Vue.use(Router)
 
 export default new Router({
@@ -17,6 +19,12 @@ export default new Router({
       name: "accountlist",
       component: accountlist,
       title: '리스트'
+    },
+    {
+      path: "/accountadd",
+      name: "accountadd",
+      component: accountadd,
+      title: '등록'
     },
   ],
   mode: 'history'

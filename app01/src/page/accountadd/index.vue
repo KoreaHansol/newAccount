@@ -1,18 +1,24 @@
 <template>
-  <div>
+  <div class="container">
+      <Calender />
   </div>
+  
 </template>
 
 <script>
 import Calender from '@/components/calander'
 export default {
-  name: 'home',
+  name: 'accountadd',
   components: {
     Calender
+  },
+  data() {
+    return {
+      
+    }
   }
 }
 </script>
 
 <style scoped>
-
 </style>
