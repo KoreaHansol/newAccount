@@ -20,6 +20,7 @@
 
 <script>
 import moment from 'moment'
+import _ from 'lodash'
 
 export default {
   name: 'calander',
@@ -70,6 +71,7 @@ export default {
       const startOfMonth = moment(parseCurrentYearAndMonth).startOf('month').day() //3월에선 월욜으로 시작하고 (1)
       const endDayOfMonth = moment(parseCurrentYearAndMonth).endOf("month").format('DD') //달에서 끝날 (끝날은 곧 총 날자의 수를 의미)
       let surPlusOfMonth = 0; //''를 push하면 현재 달의 날짜수와 틀어짐으로 계산해줄 변수가 필요
+      
       for(let i = 1; i < endDayOfMonth + startOfMonth; i++) {
         if(i < startOfMonth) {
           this.displayMonthOfDay.push('')
@@ -84,7 +86,7 @@ export default {
     },
     selectDay(day) {
       this.pickDay = this.selectYear + '-' + this.selectMonth + '-' + day
-      console.log("pickDay", this.pickDay)
+      this.$emit('pickDay', this.pickDay)
     }
   }
 }
@@ -98,6 +100,7 @@ export default {
     width: 100%;
     height: 100%;
     background: white;
+    overflow: hidden;
   }
 
   // 상단 - 요일
@@ -146,6 +149,7 @@ export default {
     justify-content: center;
   }
   .day-of-row .day-font:hover {
+    cursor: pointer;
     background: white;
   }
 </style>
